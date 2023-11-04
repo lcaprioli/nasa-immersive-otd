@@ -1,5 +1,5 @@
 # nasa-immersive-otd
-Nasa Immersive of the Day - A showcase project all developed by myself
+NASA Immersive of the Day - A showcase project all developed by myself
 
 # Motivation
 I am developing this project to expose my developer skills and evaluate my submission on a code challenge interview process. Although the scope was defined in the code challenge requirements, I will be looking forward to expanding and building it in such a way that any other developer could contribute like on a team-scale project, so could be there some boilerplate. I would like also to update myself on the nearest design patterns and practices for the Flutter stack while I'm adding new features.
@@ -11,3 +11,18 @@ I am developing this project to expose my developer skills and evaluate my submi
 - The navigation and injection dependency will use Modular. [link](https://pub.dev/packages/flutter_modular)
 - REST communication services will use Dio and the local storage will use Hive.
 - No code generation will be used at all.
+
+# External resources
+- NASA endpoint - https://api.nasa.gov/planetary/apod
+- User device storage - powered by Hive
+
+# Composition
+- Dio service
+- Hive service
+- Apod driver
+- Apod repository
+- Timeline screen bloc
+- Detail screen cubit
+- Text consts
+- Presenter widgets
+- Material theme
