@@ -16,13 +16,29 @@ I am developing this project to expose my developer skills and evaluate my submi
 - NASA endpoint - https://api.nasa.gov/planetary/apod
 - User device storage - powered by Hive
 
-# Composition
+# Composition - Services
 - Dio service
 - Hive service
+
+# Composition - Dtos/entities
+- Timeline dto
+- Detail dto
+- Timeline entity
+- Detail entity
+
+# Composition - Infra
 - Apod driver
 - Apod repository
+
+# Composition - Domain
+- Get timeline usecase
+- Get detail usecase
+
+# Composition - Presenter
 - Timeline screen bloc
 - Detail screen cubit
-- Text consts
 - Presenter widgets
+
+# Composition - Utils
+- Text consts
 - Material theme
