@@ -1,4 +1,4 @@
-name: Nasa Immersive of the Day
+name: nasa_immersive_od
 description: A showcase project all developed by myself
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  dio: ^5.3.3
 
 dev_dependencies:
   flutter_test:

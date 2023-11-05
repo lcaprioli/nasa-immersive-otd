@@ -17,7 +17,7 @@ I am developing this project to expose my developer skills and evaluate my submi
 - User device storage - powered by Hive
 
 # Composition - Services
-- Dio service
+- Api service
 - Hive service
 
 # Composition - Domain
