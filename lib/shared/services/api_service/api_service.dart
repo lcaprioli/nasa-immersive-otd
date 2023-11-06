@@ -14,7 +14,8 @@ class ApiService {
     try {
       final response = await _dio.get(
         ApiServiceConsts.kPath,
-        queryParameters: ApiServiceConsts.kApiKeyParam..addAll(params),
+        queryParameters: Map.from(ApiServiceConsts.kApiKeyParam)
+          ..addAll(params),
       );
       if (response.statusCode == 200) {
         return response.data;
