@@ -26,4 +26,24 @@ class ApiService {
       throw Exception('An error occurred: $e');
     }
   }
+
+  Future<List<int>> downloadImageData(String url) async {
+    try {
+      final response = await _dio.getUri(
+        Uri.parse(url),
+        options: Options(
+          responseType: ResponseType.bytes,
+          followRedirects: false,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception('API failed with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('An error occurred: $e');
+    }
+  }
 }
