@@ -9,16 +9,16 @@ I am developing this project to expose my developer skills and evaluate my submi
 - Use the clean architecture approach. [link](https://github.com/Flutterando/Clean-Dart)
 - Unit test each layer as it is finished.
 - The navigation and injection dependency will use Modular. [link](https://pub.dev/packages/flutter_modular)
-- REST communication services will use Dio and the local storage will use Hive.
+- REST communication services will use Dio and the local storage will use SharedPreferences.
 - No code generation will be used at all.
 
 # External resources
 - NASA endpoint - https://api.nasa.gov/planetary/apod
-- User device storage - powered by Hive
+- User device storage - powered by SharedPreferences
 
 # Composition - Services
 - Api service
-- Hive service
+- Local Storage service
 
 # Composition - Domain
 - Timeline dto
