@@ -1,5 +1,7 @@
-class ImmersiveEntity {
-  ImmersiveEntity({
+import 'package:equatable/equatable.dart';
+
+class ImmersiveEntity extends Equatable {
+  const ImmersiveEntity({
     required this.copyright,
     required this.date,
     required this.explanation,
@@ -41,4 +43,15 @@ class ImmersiveEntity {
   String toString() {
     return 'ImmersiveEntity{copyright=$copyright, date=$date, explanation=$explanation, hdurl=$hdurl, hdImageBytes=$hdImageBytes, mediaType=$mediaType, title=$title, url=$url, imageBytes=$imageBytes}';
   }
+
+  @override
+  List<Object?> get props => [
+        copyright,
+        date,
+        explanation,
+        mediaType,
+        title,
+        url,
+        hdurl,
+      ];
 }

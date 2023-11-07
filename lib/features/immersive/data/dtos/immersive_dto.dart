@@ -9,10 +9,10 @@ class ImmersiveDto extends ImmersiveEntity {
     required super.explanation,
     required super.mediaType,
     required super.title,
-    required super.hdurl,
     required super.url,
-    required super.hdImageBytes,
-    required super.imageBytes,
+    super.hdurl,
+    super.hdImageBytes,
+    super.imageBytes,
   });
 
   factory ImmersiveDto.fromJson(Map<String, dynamic> json) => ImmersiveDto(
@@ -34,15 +34,21 @@ class ImmersiveDto extends ImmersiveEntity {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['copyright'] = copyright;
-    data['date'] = '${date.year}-${date.month}-${date.day}';
+    data['date'] =
+        '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     data['explanation'] = explanation;
     data['hdurl'] = hdurl;
     data['media_type'] = mediaType;
     data['title'] = title;
     data['url'] = url;
-    data['hdImageBytes'] =
-        hdImageBytes != null ? base64Encode(hdImageBytes!) : null;
-    data['imageBytes'] = imageBytes != null ? base64Encode(imageBytes!) : null;
+    if (hdImageBytes != null) {
+      data['hdImageBytes'] =
+          hdImageBytes != null ? base64Encode(hdImageBytes!) : null;
+    }
+    if (imageBytes != null) {
+      data['imageBytes'] =
+          imageBytes != null ? base64Encode(imageBytes!) : null;
+    }
     return data;
   }
 }

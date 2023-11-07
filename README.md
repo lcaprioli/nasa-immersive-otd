@@ -21,14 +21,11 @@ I am developing this project to expose my developer skills and evaluate my submi
 - Local Storage service
 
 # Composition - Domain
-- Timeline dto
-- Detail dto
-- Timeline entity
-- Detail entity
+- Immersive entity
 - Get timeline usecase
-- Get detail usecase
 
-# Composition - Infra
+# Composition - Data
+- Immersive dto
 - Apod driver
 - Apod repository
 
