@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:nasa_immersive_od/features/immersive/data/datasource/immersive_datasource.dart';
+import 'package:nasa_immersive_od/features/immersive/data/datasource/immersive_remote_datasource.dart';
 import 'package:nasa_immersive_od/features/immersive/data/dtos/immersive_dto.dart';
 import 'package:nasa_immersive_od/shared/services/api_service/api_service.dart';
 

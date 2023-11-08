@@ -26,7 +26,7 @@ I am developing this project to expose my developer skills and evaluate my submi
 
 # Composition - Data
 - Immersive dto
-- Apod driver
+- Apod datasource
 - Apod repository
 
 # Composition - Presenter
