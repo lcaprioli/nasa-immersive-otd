@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:nasa_immersive_od/features/immersive/domain/entities/immersive_entity.dart';
+import 'package:nasa_immersive_od/shared/utils/date_utils.dart';
 
 class ImmersiveDto extends ImmersiveEntity {
-  ImmersiveDto({
+  const ImmersiveDto({
     required super.copyright,
     required super.date,
     required super.explanation,
@@ -34,8 +35,7 @@ class ImmersiveDto extends ImmersiveEntity {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['copyright'] = copyright;
-    data['date'] =
-        '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    data['date'] = date.toApiFormat();
     data['explanation'] = explanation;
     data['hdurl'] = hdurl;
     data['media_type'] = mediaType;
@@ -51,4 +51,20 @@ class ImmersiveDto extends ImmersiveEntity {
     }
     return data;
   }
+
+  copyWithBytes(
+    List<int> downloadedImageBytes,
+    List<int>? downloadedHdImageBytes,
+  ) =>
+      ImmersiveDto(
+        copyright: copyright,
+        date: date,
+        explanation: explanation,
+        mediaType: mediaType,
+        title: title,
+        url: url,
+        hdurl: hdurl,
+        hdImageBytes: downloadedHdImageBytes,
+        imageBytes: downloadedImageBytes,
+      );
 }
