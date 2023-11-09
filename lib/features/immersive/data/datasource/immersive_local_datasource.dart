@@ -1,5 +1,6 @@
 import 'package:nasa_immersive_od/features/immersive/data/dtos/immersive_dto.dart';
 import 'package:nasa_immersive_od/shared/services/local_storage_service/local_storage_service.dart';
+import 'package:nasa_immersive_od/shared/utils/date_utils.dart';
 
 class ImmersiveLocalDatasource {
   ImmersiveLocalDatasource(
@@ -8,26 +9,33 @@ class ImmersiveLocalDatasource {
 
   final LocalStorageService _localStorageService;
 
-  static const kKey = 'apod-database';
   Set<ImmersiveDto> get(DateTime start, DateTime end) {
     try {
-      final data =
-          _localStorageService.get<List<Map<String, dynamic>>>(kKey) ?? [];
+      final resultList = <ImmersiveDto>{};
+      final endDate = end.add(const Duration(days: 1));
+      DateTime currentDate = start;
+      while (currentDate.isBefore(endDate)) {
+        final itemData = _localStorageService.get(currentDate.toApiFormat());
+        if (itemData != null) {
+          resultList.add(ImmersiveDto.fromJson(itemData));
+        }
 
-      final filteredData = data.where((json) {
-        if (json['date'] == null) return false;
-        final itemDate = DateTime.parse(json['date']);
-        return itemDate.isAfter(start) && itemDate.isBefore(end);
-      });
-      return filteredData.map((json) => ImmersiveDto.fromJson(json)).toSet();
+        currentDate = currentDate.add(const Duration(days: 1));
+      }
+      return resultList;
     } catch (e) {
       throw Exception('An error occurred: $e');
     }
   }
 
-  Future<void> cache(Set<ImmersiveDto> items) async {
+  Future<void> write(Set<ImmersiveDto> items) async {
     try {
-      await _localStorageService.set(kKey, items.map((dto) => dto.toJson()));
+      for (final immersiveDto in items) {
+        await _localStorageService.set(
+          immersiveDto.date.toApiFormat(),
+          immersiveDto.toJson(),
+        );
+      }
     } catch (e) {
       throw Exception('An error occurred: $e');
     }
