@@ -71,10 +71,10 @@ void main() {
       },
     );
     test(
-      'should return error when no data is returned',
+      'should return error when no remote data is returned',
       () async {
         when(() => mockRemoteDatasource.getApod(startDate, endDate))
-            .thenAnswer((_) async => <ImmersiveDto>{});
+            .thenAnswer((_) async => Set.unmodifiable({}));
 
         final call = repository.get;
         expect(() => call(DateTime.now(), DateTime.now()),
@@ -96,6 +96,30 @@ void main() {
         final result = await repository.get(startDate, endDate);
 
         expect(result, tImmersiveList);
+      },
+    );
+
+    test(
+      'should return error when the call to local data source has failed',
+      () async {
+        when(() => mockLocalDatasource.get(startDate, endDate))
+            .thenAnswer((_) => throw Exception());
+
+        final call = repository.get;
+        expect(() => call(DateTime.now(), DateTime.now()),
+            throwsA(const TypeMatcher<Exception>()));
+      },
+    );
+
+    test(
+      'should return error when no local data is returned',
+      () async {
+        when(() => mockLocalDatasource.get(startDate, endDate))
+            .thenAnswer((_) => Set.unmodifiable({}));
+
+        final call = repository.get;
+        expect(() => call(DateTime.now(), DateTime.now()),
+            throwsA(const TypeMatcher<Exception>()));
       },
     );
   });
