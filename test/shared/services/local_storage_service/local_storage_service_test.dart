@@ -9,12 +9,11 @@ import '../../../fixtures/fixture_reader.dart';
 void main() {
   late LocalStorageService localStorageService;
 
-  const kMockKey = 'localCache';
-  final mockList = jsonDecode(fixture('apod_list.json')) as List<dynamic>;
+  const kMockKey = '2017-07-08';
   final mockItem = jsonDecode(fixture('apod_item.json'));
 
   SharedPreferences.setMockInitialValues({
-    kMockKey: fixture('apod_list.json'),
+    kMockKey: fixture('apod_item.json'),
   });
 
   setUp(() async {
@@ -23,15 +22,14 @@ void main() {
   });
 
   test('get', () {
-    final data = localStorageService.get<List<dynamic>>(kMockKey);
-    expect(data, mockList);
+    final data = localStorageService.get(kMockKey);
+    expect(data, mockItem);
   });
 
   test('set', () async {
-    final expectedCount = mockList.length + 1;
-    await localStorageService.set(kMockKey, mockList..add(mockItem));
-    final actualCount =
-        localStorageService.get<List<dynamic>>(kMockKey)?.length;
-    expect(expectedCount, actualCount);
+    SharedPreferences.setMockInitialValues({});
+    await localStorageService.set(kMockKey, mockItem);
+    final data = localStorageService.get(kMockKey);
+    expect(data, mockItem);
   });
 }
