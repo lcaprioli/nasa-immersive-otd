@@ -23,7 +23,7 @@ void main() {
 
   test('get', () async {
     final httpResponse = ResponseBody.fromString(
-      fixture('apod_item.json'),
+      fixture('apod_list.json'),
       200,
       headers: {
         Headers.contentTypeHeader: [Headers.jsonContentType],
@@ -34,7 +34,7 @@ void main() {
         .thenAnswer((_) async => httpResponse);
 
     final response = await apiService.get({});
-    final expected = jsonDecode(fixture('apod_item.json'));
+    final expected = jsonDecode(fixture('apod_list.json'));
 
     expect(response, equals(expected));
   });

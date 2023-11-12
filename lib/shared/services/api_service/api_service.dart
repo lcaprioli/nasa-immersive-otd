@@ -10,7 +10,7 @@ class ApiService {
 
   final Dio _dio;
 
-  Future<Map<String, dynamic>> get(Map<String, String> params) async {
+  Future<dynamic> get(Map<String, String> params) async {
     try {
       final response = await _dio.get(
         ApiServiceConsts.kPath,

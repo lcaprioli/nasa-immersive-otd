@@ -8,7 +8,7 @@ class LocalStorageService {
 
   final SharedPreferences _sharedPreferences;
 
-  T? get<T>(String key) {
+  Map<String, dynamic>? get(String key) {
     final data = _sharedPreferences.getString(key);
     if (data == null) return null;
     return jsonDecode(data);
