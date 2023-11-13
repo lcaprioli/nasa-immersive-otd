@@ -10,7 +10,7 @@ abstract class TimelineState extends Equatable {
   final int page;
 
   @override
-  List<Object?> get props => [immersives];
+  List<Object?> get props => [immersives, page];
 }
 
 class TimelineInitial extends TimelineState {
@@ -21,24 +21,27 @@ class TimelineInitial extends TimelineState {
         );
 
   @override
-  List<Object?> get props => [immersives];
+  List<Object?> get props => [immersives, page];
 }
 
 class TimelineInProgress extends TimelineState {
-  const TimelineInProgress({required super.page}) : super(immersives: const {});
+  const TimelineInProgress({required super.page})
+      : super(
+          immersives: const {},
+        );
 
   @override
-  List<Object?> get props => [immersives];
+  List<Object?> get props => [immersives, page];
 }
 
-class TimelineInSuccess extends TimelineState {
-  const TimelineInSuccess({
+class TimelineSuccess extends TimelineState {
+  const TimelineSuccess({
     required super.immersives,
     required super.page,
   });
 
   @override
-  List<Object?> get props => [immersives];
+  List<Object?> get props => [immersives, page];
 }
 
 class TimelineError extends TimelineState {
@@ -47,7 +50,7 @@ class TimelineError extends TimelineState {
     required this.error,
   }) : super(immersives: const {});
 
-  final Exception error;
+  final Object error;
   @override
-  List<Object?> get props => [immersives, error];
+  List<Object?> get props => [immersives, page, error];
 }
