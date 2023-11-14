@@ -51,15 +51,24 @@ class _TimelinePageState extends State<TimelinePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      Wrap(
+                        alignment: WrapAlignment.center,
                         children: state.immersives
                             .map(
-                              (e) => Text(DateFormat.MMMd().format(e.date)),
+                              (e) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                ),
+                                child: Chip(
+                                  label: Text(DateFormat.MMMd().format(e.date)),
+                                ),
+                              ),
                             )
                             .toList(),
                       ),
-                      Text(state.page.toString()),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
