@@ -8,13 +8,13 @@
             "name": "nasa_immersive_od",
             "request": "launch",
             "type": "dart",
-            "args": [
+         /*    "args": [
                 "chrome",
                 "--web-port",
                 "8080",
                 "--web-hostname",
                 "localhost",
-            ]
+            ] */
         },
         {
             "name": "nasa_immersive_od (profile mode)",

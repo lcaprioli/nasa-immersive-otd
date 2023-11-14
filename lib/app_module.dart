@@ -8,13 +8,15 @@ import 'package:nasa_immersive_od/features/immersive/presentation/timeline/widge
 import 'package:nasa_immersive_od/shared/services/api_service/api_service.dart';
 import 'package:nasa_immersive_od/shared/services/connection_check_service.dart';
 import 'package:nasa_immersive_od/shared/services/local_storage_service/local_storage_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
         Bind<Dio>((i) => Dio()),
         Bind((i) => ConnectionCheckService()),
-        Bind((i) => LocalStorageService()),
+        AsyncBind((i) async => LocalStorageService(
+            sharedPreferences: await SharedPreferences.getInstance())),
         Bind((i) => ApiService(Modular.get<Dio>())),
         Bind((i) =>
             ImmersiveLocalDatasource(Modular.get<LocalStorageService>())),
