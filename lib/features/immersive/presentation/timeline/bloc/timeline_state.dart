@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:nasa_immersive_od/features/immersive/domain/entities/immersive_entity.dart';
 
-abstract class TimelineState extends Equatable {
+sealed class TimelineState extends Equatable {
   const TimelineState({
     required this.immersives,
     required this.page,

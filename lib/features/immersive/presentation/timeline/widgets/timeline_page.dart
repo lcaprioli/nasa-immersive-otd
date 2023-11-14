@@ -3,16 +3,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_bloc.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_state.dart';
 
-class TimelinePage extends StatelessWidget {
+class TimelinePage extends StatefulWidget {
   const TimelinePage({super.key, required this.bloc});
 
   final TimelineBloc bloc;
 
   @override
+  State<TimelinePage> createState() => _TimelinePageState();
+}
+
+class _TimelinePageState extends State<TimelinePage> {
+  @override
+  void initState() {
+    widget.bloc.init();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<TimelineBloc, TimelineState>(
-          bloc: bloc,
+          bloc: widget.bloc,
           listener: (context, state) {
             if (state is TimelineError) {
               ScaffoldMessenger.of(context)
@@ -29,7 +40,7 @@ class TimelinePage extends StatelessWidget {
                     Text(state.immersives.map((e) => e.title).toList().join())
                   ],
                 ),
-              TimelineState() => const SizedBox.shrink(),
+              TimelineError() => const SizedBox.shrink()
             };
           }),
     );

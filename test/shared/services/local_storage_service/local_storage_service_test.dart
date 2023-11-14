@@ -17,8 +17,7 @@ void main() {
   });
 
   setUp(() async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    localStorageService = LocalStorageService(sharedPreferences);
+    localStorageService = LocalStorageService();
   });
 
   test('get', () {

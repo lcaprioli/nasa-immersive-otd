@@ -6,14 +6,14 @@ import 'package:nasa_immersive_od/shared/services/api_service/api_service_consts
 class ApiService {
   ApiService(
     Dio dio,
-  ) : _dio = dio..options.baseUrl = ApiServiceConsts.kBaseUrl;
+  ) : _dio = dio;
 
   final Dio _dio;
 
   Future<dynamic> get(Map<String, String> params) async {
     try {
       final response = await _dio.get(
-        ApiServiceConsts.kPath,
+        ApiServiceConsts.kUrl,
         queryParameters: Map.from(ApiServiceConsts.kApiKeyParam)
           ..addAll(params),
       );

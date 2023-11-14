@@ -9,13 +9,14 @@ class ImmersiveLocalDatasource {
 
   final LocalStorageService _localStorageService;
 
-  Set<ImmersiveDto> get(DateTime start, DateTime end) {
+  Future<Set<ImmersiveDto>> get(DateTime start, DateTime end) async {
     try {
       final resultList = <ImmersiveDto>{};
       final endDate = end.add(const Duration(days: 1));
       DateTime currentDate = start;
       while (currentDate.isBefore(endDate)) {
-        final itemData = _localStorageService.get(currentDate.toApiFormat());
+        final itemData =
+            await _localStorageService.get(currentDate.toApiFormat());
         if (itemData != null) {
           resultList.add(ImmersiveDto.fromJson(itemData));
         }

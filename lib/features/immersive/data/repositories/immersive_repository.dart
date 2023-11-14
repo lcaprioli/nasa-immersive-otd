@@ -30,7 +30,7 @@ class ImmersiveRepository {
       }
     } else {
       try {
-        final result = _localDatasource.get(start, end);
+        final result = await _localDatasource.get(start, end);
         if (result.isEmpty) {
           throw Exception('No data found');
         }

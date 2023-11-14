@@ -57,4 +57,6 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
       emit(TimelineError(page: _page, message: e.toString()));
     }
   }
+
+  void init() => add(const TimelineStarted());
 }
