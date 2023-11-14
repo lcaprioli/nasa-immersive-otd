@@ -15,16 +15,17 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
   final ImmersiveRepository _repository;
 
   final Set<Set<ImmersiveEntity>> _collection = {};
+
+  static const _interval = 5;
+
   int _page = 0;
 
-  DateTime get _initialDate => DateTime.now()
-    ..subtract(
-      Duration(days: (_page + 1) * 5),
-    );
-  DateTime get _endDate => DateTime.now()
-    ..subtract(
-      Duration(days: _page * 5),
-    );
+  DateTime get _initialDate => DateTime.now().subtract(
+        Duration(days: ((_page + 1) * (_interval)) - 1),
+      );
+  DateTime get _endDate => DateTime.now().subtract(
+        Duration(days: _page * _interval),
+      );
 
   _onStarted(TimelineStarted event, Emitter emit) async {
     try {
@@ -44,7 +45,7 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
     try {
       _page = event.page;
 
-      if (_collection.elementAt(_page).isEmpty) {
+      if (_collection.elementAtOrNull(_page) == null) {
         emit(TimelineInProgress(page: _page));
         final immersives = await _repository.get(_initialDate, _endDate);
         _collection.add(immersives);
@@ -59,4 +60,6 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
   }
 
   void init() => add(const TimelineStarted());
+  void prev() => add(TimelinePageChanged(_page + 1));
+  void next() => add(TimelinePageChanged(_page - 1));
 }

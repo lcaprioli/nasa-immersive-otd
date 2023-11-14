@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_bloc.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_state.dart';
+import 'package:nasa_immersive_od/shared/utils/date_utils.dart';
 
 class TimelinePage extends StatefulWidget {
   const TimelinePage({super.key, required this.bloc});
@@ -35,9 +37,40 @@ class _TimelinePageState extends State<TimelinePage> {
               TimelineInitial() => const SizedBox.shrink(),
               TimelineInProgress() => const CircularProgressIndicator(),
               TimelineSuccess() => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text(
+                      state.immersives.map((e) => e.title).toList().join(','),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: state.immersives
+                          .map(
+                            (e) => Text(DateFormat.MMMd().format(e.date)),
+                          )
+                          .toList(),
+                    ),
                     Text(state.page.toString()),
-                    Text(state.immersives.map((e) => e.title).toList().join())
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FilledButton(
+                          onPressed: widget.bloc.prev,
+                          child: const Text('<'),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        FilledButton(
+                          onPressed: state.page > 0 ? widget.bloc.next : null,
+                          child: const Text('>'),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               TimelineError() => const SizedBox.shrink()
