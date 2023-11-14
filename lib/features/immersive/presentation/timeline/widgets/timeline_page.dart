@@ -33,48 +33,69 @@ class _TimelinePageState extends State<TimelinePage> {
             }
           },
           builder: (context, state) {
-            return switch (state) {
-              TimelineInitial() => const SizedBox.shrink(),
-              TimelineInProgress() => const CircularProgressIndicator(),
-              TimelineSuccess() => Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      state.immersives.map((e) => e.title).toList().join(','),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: state.immersives
-                          .map(
-                            (e) => Text(DateFormat.MMMd().format(e.date)),
-                          )
-                          .toList(),
-                    ),
-                    Text(state.page.toString()),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FilledButton(
-                          onPressed: widget.bloc.prev,
-                          child: const Text('<'),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        FilledButton(
-                          onPressed: state.page > 0 ? widget.bloc.next : null,
-                          child: const Text('>'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              TimelineError() => const SizedBox.shrink()
-            };
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 40,
+                vertical: 20,
+              ),
+              child: switch (state) {
+                TimelineInitial() => const SizedBox.shrink(),
+                TimelineInProgress() => const CircularProgressIndicator(),
+                TimelineSuccess() => Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        state.immersives.map((e) => e.title).toList().join(','),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: state.immersives
+                            .map(
+                              (e) => Text(DateFormat.MMMd().format(e.date)),
+                            )
+                            .toList(),
+                      ),
+                      Text(state.page.toString()),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FilledButton(
+                            onPressed: widget.bloc.prev,
+                            child: const Text('<'),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          FilledButton(
+                            onPressed: state.page > 0 ? widget.bloc.next : null,
+                            child: const Text('>'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                TimelineError() => Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.crisis_alert,
+                        size: 95,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        state.message,
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  )
+              },
+            );
           }),
     );
   }
