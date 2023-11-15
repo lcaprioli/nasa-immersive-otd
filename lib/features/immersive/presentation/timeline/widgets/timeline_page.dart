@@ -43,22 +43,45 @@ class _TimelinePageState extends State<TimelinePage> {
                 TimelineSuccess() => Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        state.immersives.map((e) => e.title).toList().join(','),
-                        textAlign: TextAlign.center,
+                      Expanded(
+                        child: PageView.builder(
+                          itemCount: state.immersives.length,
+                          itemBuilder: (_, index) => Text(
+                            state.immersives.elementAt(index).title,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FilledButton(
+                            onPressed: widget.bloc.prev,
+                            child: const Text('<'),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          FilledButton(
+                            onPressed: state.page > 0 ? widget.bloc.next : null,
+                            child: const Text('>'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: state.immersives
                             .map(
                               (e) => Text(DateFormat.MMMd().format(e.date)),
                             )
                             .toList(),
                       ),
-                      Text(state.page.toString()),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
