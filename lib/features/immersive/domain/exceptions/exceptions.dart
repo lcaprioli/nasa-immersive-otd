@@ -1,11 +1,13 @@
-class ServerException implements Exception {}
+sealed class CustomException implements Exception {}
 
-class LocalStorageReadException implements Exception {}
+class ServerException implements CustomException {}
 
-class LocalStorageWriteException implements Exception {}
+class LocalStorageReadException implements CustomException {}
 
-class NoRemoteDataException implements Exception {}
+class LocalStorageWriteException implements CustomException {}
 
-class NoLocalDataException implements Exception {}
+class NoRemoteDataException implements CustomException {}
 
-class ImageDownloadException implements Exception {}
+class NoLocalDataException implements CustomException {}
+
+class ImageDownloadException implements CustomException {}

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:nasa_immersive_od/features/immersive/domain/entities/immersive_entity.dart';
+import 'package:nasa_immersive_od/features/immersive/domain/exceptions/exceptions.dart';
 
 sealed class TimelineState extends Equatable {
   const TimelineState({
@@ -50,7 +51,8 @@ class TimelineError extends TimelineState {
     required this.error,
   }) : super(immersives: const {});
 
-  final Object error;
+  final CustomException error;
+
   @override
   List<Object?> get props => [immersives, page, error];
 }
