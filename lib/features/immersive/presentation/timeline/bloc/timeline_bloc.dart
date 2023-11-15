@@ -50,7 +50,7 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
         page: _page,
       ));
     } catch (e) {
-      emit(TimelineError(page: _page, message: e.toString()));
+      emit(TimelineError(page: _page, error: e));
     }
   }
 

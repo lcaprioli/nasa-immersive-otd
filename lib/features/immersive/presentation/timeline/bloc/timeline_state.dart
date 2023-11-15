@@ -47,10 +47,10 @@ class TimelineSuccess extends TimelineState {
 class TimelineError extends TimelineState {
   const TimelineError({
     required super.page,
-    required this.message,
+    required this.error,
   }) : super(immersives: const {});
 
-  final String message;
+  final Object error;
   @override
-  List<Object?> get props => [immersives, page, message];
+  List<Object?> get props => [immersives, page, error];
 }
