@@ -38,67 +38,64 @@ class _TimelinePageState extends State<TimelinePage> {
             }
           },
           builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 40,
-                vertical: 20,
-              ),
-              child: switch (state) {
-                TimelineInitial() => const SizedBox.shrink(),
-                TimelineInProgress() => const CircularProgressIndicator(),
-                TimelineSuccess() => Column(
-                    children: [
-                      Expanded(
-                        child: TimelineCarousel(
-                          immersives: state.immersives,
+            return switch (state) {
+              TimelineInitial() => const SizedBox.shrink(),
+              TimelineInProgress() => const CircularProgressIndicator(),
+              TimelineSuccess() => Column(
+                  children: [
+                    Expanded(
+                      child: TimelineCarousel(
+                        immersives: state.immersives,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FilledButton(
+                          onPressed: widget.bloc.prev,
+                          child: const Text('<'),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FilledButton(
-                            onPressed: widget.bloc.prev,
-                            child: const Text('<'),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          FilledButton(
-                            onPressed: state.page > 0 ? widget.bloc.next : null,
-                            child: const Text('>'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                TimelineError() => Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.crisis_alert,
-                        size: 95,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        state.message,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      FilledButton(
-                        onPressed: widget.bloc.refresh,
-                        child: const Text('Retry'),
-                      )
-                    ],
-                  )
-              },
-            );
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        FilledButton(
+                          onPressed: state.page > 0 ? widget.bloc.next : null,
+                          child: const Text('>'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                  ],
+                ),
+              TimelineError() => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.crisis_alert,
+                      size: 95,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      state.message,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    FilledButton(
+                      onPressed: widget.bloc.refresh,
+                      child: const Text('Retry'),
+                    )
+                  ],
+                )
+            };
           }),
     );
   }
@@ -127,6 +124,14 @@ class _TimelineCarouselState extends State<TimelineCarousel> {
   }
 
   @override
+  void didUpdateWidget(covariant TimelineCarousel oldWidget) {
+    _actual = widget.immersives.length - 1;
+    _controller = PageController(initialPage: _actual);
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -137,35 +142,60 @@ class _TimelineCarouselState extends State<TimelineCarousel> {
             itemCount: widget.immersives.length,
             itemBuilder: (_, index) => Column(
               children: [
-                Image.memory(Uint8List.fromList(
-                    widget.immersives.elementAt(index).imageBytes ?? [])),
-                Text(
-                  widget.immersives.elementAt(index).title,
-                  textAlign: TextAlign.center,
+                Image.memory(
+                  Uint8List.fromList(
+                      widget.immersives.elementAt(index).imageBytes ?? []),
+                  height: 280,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        Text(
+                          widget.immersives.elementAt(index).title,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          widget.immersives.elementAt(index).explanation,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(
-          height: 15,
-        ),
-        Wrap(
-          alignment: WrapAlignment.center,
-          children: List.generate(
-            widget.immersives.length,
-            (index) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FilledButton(
-                style: index == _actual
-                    ? FilledButton.styleFrom(backgroundColor: Colors.amber)
-                    : null,
-                onPressed: () => setState(() {
-                  _actual = index;
-                  _controller.jumpToPage(index);
-                }),
-                child: Text(DateFormat.MMMd()
-                    .format(widget.immersives.elementAt(index).date)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            children: List.generate(
+              widget.immersives.length,
+              (index) => Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: FilledButton(
+                  style: index == _actual
+                      ? FilledButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColorDark)
+                      : null,
+                  onPressed: () => setState(() {
+                    _actual = index;
+                    _controller.jumpToPage(index);
+                  }),
+                  child: Text(DateFormat.MMMd()
+                      .format(widget.immersives.elementAt(index).date)),
+                ),
               ),
             ),
           ),
