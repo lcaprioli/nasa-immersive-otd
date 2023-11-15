@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dio/dio.dart';
+import 'package:nasa_immersive_od/features/immersive/domain/exceptions/exceptions.dart';
 import 'package:nasa_immersive_od/shared/services/api_service/api_service.dart';
 import 'package:mocktail/mocktail.dart';
 import '../../../fixtures/fixture_reader.dart';
@@ -21,7 +22,7 @@ void main() {
     registerFallbackValue(RequestOptions());
   });
 
-  test('get', () async {
+  test('get success', () async {
     final httpResponse = ResponseBody.fromString(
       fixture('apod_list.json'),
       200,
@@ -37,5 +38,20 @@ void main() {
     final expected = jsonDecode(fixture('apod_list.json'));
 
     expect(response, equals(expected));
+  });
+  test('get failure', () async {
+    when(() => dioAdapterMock.fetch(any(), any(), any()))
+        .thenAnswer((_) => throw Exception());
+
+    final call = apiService.get;
+    expect(() => call({}), throwsA(const TypeMatcher<ServerException>()));
+  });
+  test('image download failure', () async {
+    when(() => dioAdapterMock.fetch(any(), any(), any()))
+        .thenAnswer((_) => throw Exception());
+
+    final call = apiService.downloadImageData;
+    expect(
+        () => call(''), throwsA(const TypeMatcher<ImageDownloadException>()));
   });
 }
