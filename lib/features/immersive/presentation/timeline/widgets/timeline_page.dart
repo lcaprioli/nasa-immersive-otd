@@ -1,6 +1,10 @@
+import 'dart:ffi';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:nasa_immersive_od/features/immersive/domain/entities/immersive_entity.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_bloc.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_state.dart';
 
@@ -14,6 +18,8 @@ class TimelinePage extends StatefulWidget {
 }
 
 class _TimelinePageState extends State<TimelinePage> {
+  final _controller = PageController();
+
   @override
   void initState() {
     widget.bloc.init();
@@ -41,34 +47,11 @@ class _TimelinePageState extends State<TimelinePage> {
                 TimelineInitial() => const SizedBox.shrink(),
                 TimelineInProgress() => const CircularProgressIndicator(),
                 TimelineSuccess() => Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: PageView.builder(
-                          itemCount: state.immersives.length,
-                          itemBuilder: (_, index) => Text(
-                            state.immersives.elementAt(index).title,
-                            textAlign: TextAlign.center,
-                          ),
+                        child: TimelineCarousel(
+                          immersives: state.immersives,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        children: state.immersives
-                            .map(
-                              (e) => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 5,
-                                ),
-                                child: Chip(
-                                  label: Text(DateFormat.MMMd().format(e.date)),
-                                ),
-                              ),
-                            )
-                            .toList(),
                       ),
                       const SizedBox(
                         height: 20,
@@ -117,6 +100,77 @@ class _TimelinePageState extends State<TimelinePage> {
               },
             );
           }),
+    );
+  }
+}
+
+class TimelineCarousel extends StatefulWidget {
+  const TimelineCarousel({
+    super.key,
+    required this.immersives,
+  });
+
+  final Set<ImmersiveEntity> immersives;
+
+  @override
+  State<TimelineCarousel> createState() => _TimelineCarouselState();
+}
+
+class _TimelineCarouselState extends State<TimelineCarousel> {
+  late PageController _controller;
+  late int _actual;
+  @override
+  void initState() {
+    _actual = widget.immersives.length - 1;
+    _controller = PageController(initialPage: _actual);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: PageView.builder(
+            controller: _controller,
+            itemCount: widget.immersives.length,
+            itemBuilder: (_, index) => Column(
+              children: [
+                Image.memory(Uint8List.fromList(
+                    widget.immersives.elementAt(index).imageBytes ?? [])),
+                Text(
+                  widget.immersives.elementAt(index).title,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Wrap(
+          alignment: WrapAlignment.center,
+          children: List.generate(
+            widget.immersives.length,
+            (index) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FilledButton(
+                style: index == _actual
+                    ? FilledButton.styleFrom(backgroundColor: Colors.amber)
+                    : null,
+                onPressed: () => setState(() {
+                  _actual = index;
+                  _controller.jumpToPage(index);
+                }),
+                child: Text(DateFormat.MMMd()
+                    .format(widget.immersives.elementAt(index).date)),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
