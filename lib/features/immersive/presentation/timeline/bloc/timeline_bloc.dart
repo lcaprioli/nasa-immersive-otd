@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nasa_immersive_od/features/immersive/data/repositories/immersive_repository.dart';
 import 'package:nasa_immersive_od/features/immersive/domain/entities/immersive_entity.dart';
+import 'package:nasa_immersive_od/features/immersive/domain/exceptions/exceptions.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_event.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_state.dart';
 
@@ -49,7 +50,7 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
         immersives: _collection.elementAt(_page),
         page: _page,
       ));
-    } catch (e) {
+    } on CustomException catch (e) {
       emit(TimelineError(page: _page, error: e));
     }
   }

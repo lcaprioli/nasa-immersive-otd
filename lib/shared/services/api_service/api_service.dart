@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:nasa_immersive_od/features/immersive/domain/exceptions/exceptions.dart';
 import 'package:nasa_immersive_od/shared/services/api_service/api_service_consts.dart';
 
 class ApiService {
@@ -20,10 +21,10 @@ class ApiService {
       if (response.statusCode == 200) {
         return response.data;
       } else {
-        throw Exception('API failed with status code: ${response.statusCode}');
+        throw ServerException();
       }
     } catch (e) {
-      throw Exception('An error occurred: $e');
+      throw ServerException();
     }
   }
 
@@ -40,10 +41,10 @@ class ApiService {
       if (response.statusCode == 200) {
         return response.data;
       } else {
-        throw Exception('API failed with status code: ${response.statusCode}');
+        throw ImageDownloadException();
       }
     } catch (e) {
-      throw Exception('An error occurred: $e');
+      throw ImageDownloadException();
     }
   }
 }

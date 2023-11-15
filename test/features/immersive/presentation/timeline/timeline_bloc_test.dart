@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nasa_immersive_od/features/immersive/data/dtos/immersive_dto.dart';
 import 'package:nasa_immersive_od/features/immersive/data/repositories/immersive_repository.dart';
+import 'package:nasa_immersive_od/features/immersive/domain/exceptions/exceptions.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_bloc.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_event.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_state.dart';
@@ -60,7 +61,7 @@ void main() {
   test(
     'should emit [InProgress, Error] when getting data fails',
     () async {
-      final tException = Exception();
+      final tException = ServerException();
       when(() => mockImmersiveRepository.get(any(), any()))
           .thenAnswer((_) async => throw tException);
 

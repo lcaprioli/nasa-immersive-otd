@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 import 'package:nasa_immersive_od/features/immersive/domain/entities/immersive_entity.dart';
+import 'package:nasa_immersive_od/features/immersive/domain/exceptions/exceptions.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_bloc.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_state.dart';
 
@@ -17,6 +18,8 @@ class TimelinePage extends StatefulWidget {
 }
 
 class _TimelinePageState extends State<TimelinePage> {
+  int _page = 0;
+
   @override
   void initState() {
     widget.bloc.init();
@@ -47,8 +50,21 @@ class _TimelinePageState extends State<TimelinePage> {
                   bloc: widget.bloc,
                   listener: (context, state) {
                     if (state is TimelineError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(state.error.toString())));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(switch (state.error) {
+                        ServerException() =>
+                          'Error getting the data from the server',
+                        LocalStorageReadException() =>
+                          'Error reading the data from your storage',
+                        LocalStorageWriteException() =>
+                          'Error writing the data to your storage',
+                        NoRemoteDataException() =>
+                          'No data was found on the server',
+                        NoLocalDataException() =>
+                          'No cached data was found, connect to the internet and retry',
+                        ImageDownloadException() =>
+                          'One or more images could not be downloaded',
+                      })));
                     }
                   },
                   builder: (context, state) {
@@ -65,35 +81,6 @@ class _TimelinePageState extends State<TimelinePage> {
                                   immersives: state.immersives,
                                 ),
                               ),
-                              ColoredBox(
-                                color: Colors.grey,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: FilledButton(
-                                          onPressed: widget.bloc.prev,
-                                          child: const Text('< Previous'),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
-                                      Expanded(
-                                        child: FilledButton(
-                                          onPressed: state.page > 0
-                                              ? widget.bloc.next
-                                              : null,
-                                          child: const Text('Next >'),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         TimelineError() => Column(
@@ -102,12 +89,19 @@ class _TimelinePageState extends State<TimelinePage> {
                               const Icon(
                                 Icons.crisis_alert,
                                 size: 95,
+                                color: Colors.amber,
                               ),
                               const SizedBox(
                                 height: 20,
                               ),
-                              const Text(
+                              Text(
                                 'An error has occured, try again.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Colors.amber,
+                                    ),
                                 textAlign: TextAlign.center,
                               ),
                               const SizedBox(
@@ -122,6 +116,44 @@ class _TimelinePageState extends State<TimelinePage> {
                       },
                     );
                   }),
+            ),
+            ColoredBox(
+              color: Colors.grey,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: () {
+                          setState(() {
+                            _page++;
+                          });
+                          widget.bloc.prev();
+                        },
+                        child: const Text('< Previous'),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: _page > 0
+                            ? () {
+                                setState(() {
+                                  _page--;
+                                });
+                                widget.bloc.next();
+                              }
+                            : null,
+                        child: const Text('Next >'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
