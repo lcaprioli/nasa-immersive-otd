@@ -55,32 +55,23 @@ class _TimelinePageState extends State<TimelinePage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FilledButton(
-                            onPressed: widget.bloc.prev,
-                            child: const Text('<'),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          FilledButton(
-                            onPressed: state.page > 0 ? widget.bloc.next : null,
-                            child: const Text('>'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Wrap(
+                        alignment: WrapAlignment.center,
                         children: state.immersives
                             .map(
-                              (e) => Text(DateFormat.MMMd().format(e.date)),
+                              (e) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                ),
+                                child: Chip(
+                                  label: Text(DateFormat.MMMd().format(e.date)),
+                                ),
+                              ),
                             )
                             .toList(),
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
