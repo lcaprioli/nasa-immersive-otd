@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:nasa_immersive_od/features/immersive/data/datasources/immersive_local_datasource.dart';
 import 'package:nasa_immersive_od/features/immersive/data/datasources/immersive_remote_datasource.dart';
 import 'package:nasa_immersive_od/features/immersive/data/repositories/immersive_repository.dart';
+import 'package:nasa_immersive_od/features/immersive/presentation/detail/detail_page.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_bloc.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/widgets/timeline_page.dart';
 import 'package:nasa_immersive_od/shared/services/api_service/api_service.dart';
@@ -35,9 +36,17 @@ class AppModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/',
-            child: (context, args) => TimelinePage(
-                  bloc: Modular.get<TimelineBloc>(),
-                )),
+        ChildRoute(
+          '/',
+          child: (context, args) => TimelinePage(
+            bloc: Modular.get<TimelineBloc>(),
+          ),
+        ),
+        ChildRoute(
+          '/detail',
+          child: (context, args) => DetailPage(
+            immersive: args.data,
+          ),
+        ),
       ];
 }
