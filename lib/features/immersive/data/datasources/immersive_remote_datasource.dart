@@ -25,7 +25,6 @@ class ImmersiveRemoteDatasource {
             ? await _apiService.downloadImageData(dto.hdurl!)
             : null; */
         resultList.add(dto.copyWithBytes(imageBytes, null));
-        print(dto.date);
         await Future.delayed(const Duration(seconds: 1));
       }
       return resultList;

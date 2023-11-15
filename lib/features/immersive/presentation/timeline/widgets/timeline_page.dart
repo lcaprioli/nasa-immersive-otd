@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 import 'package:nasa_immersive_od/features/immersive/domain/entities/immersive_entity.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_bloc.dart';
@@ -147,6 +149,10 @@ class _TimelineCarouselState extends State<TimelineCarousel> {
   late int _actual;
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
     _actual = widget.immersives.length - 1;
     _controller = PageController(initialPage: _actual);
     super.initState();
@@ -175,11 +181,31 @@ class _TimelineCarouselState extends State<TimelineCarousel> {
               itemBuilder: (_, index) => Column(
                 children: [
                   Expanded(
-                    child: Image.memory(
-                      Uint8List.fromList(
-                          widget.immersives.elementAt(index).imageBytes ?? []),
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Positioned.fill(
+                          child: Image.memory(
+                            Uint8List.fromList(
+                                widget.immersives.elementAt(index).imageBytes ??
+                                    []),
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Align(
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                                padding: const EdgeInsets.all(20),
+                                textStyle:
+                                    Theme.of(context).textTheme.headlineSmall,
+                                backgroundColor: Colors.black.withAlpha(80)),
+                            onPressed: () => Modular.to.pushNamed('/detail',
+                                arguments: widget.immersives.elementAt(index)),
+                            child: const Text('Open Immersive'),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                   Padding(

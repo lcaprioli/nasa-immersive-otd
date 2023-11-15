@@ -17,15 +17,15 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
 
   final Set<Set<ImmersiveEntity>> _collection = {};
 
-  static const _interval = 5;
+  static const _kInterval = 3;
 
   int _page = 0;
 
   DateTime get _initialDate => DateTime.now().subtract(
-        Duration(days: ((_page + 1) * (_interval)) - 1),
+        Duration(days: ((_page + 1) * (_kInterval)) - 1),
       );
   DateTime get _endDate => DateTime.now().subtract(
-        Duration(days: _page * _interval),
+        Duration(days: _page * _kInterval),
       );
 
   _onStarted(TimelineStarted event, Emitter emit) async => _fetch(0, emit);
