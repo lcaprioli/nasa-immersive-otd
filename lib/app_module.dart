@@ -11,12 +11,16 @@ import 'package:nasa_immersive_od/shared/services/local_storage_service/local_st
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppModule extends Module {
+  AppModule(this.sharedPreferences);
+  final SharedPreferences sharedPreferences;
+
   @override
   List<Bind> get binds => [
         Bind<Dio>((i) => Dio()),
         Bind((i) => ConnectionCheckService()),
-        AsyncBind((i) async => LocalStorageService(
-            sharedPreferences: await SharedPreferences.getInstance())),
+        Bind(
+          (i) => LocalStorageService(sharedPreferences: sharedPreferences),
+        ),
         Bind((i) => ApiService(Modular.get<Dio>())),
         Bind((i) =>
             ImmersiveLocalDatasource(Modular.get<LocalStorageService>())),

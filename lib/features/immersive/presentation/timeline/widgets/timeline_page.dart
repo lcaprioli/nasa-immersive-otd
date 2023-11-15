@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_bloc.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_state.dart';
-import 'package:nasa_immersive_od/shared/utils/date_utils.dart';
 
 class TimelinePage extends StatefulWidget {
   const TimelinePage({super.key, required this.bloc});
@@ -91,6 +90,13 @@ class _TimelinePageState extends State<TimelinePage> {
                       Text(
                         state.message,
                         textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      FilledButton(
+                        onPressed: widget.bloc.refresh,
+                        child: const Text('Retry'),
                       )
                     ],
                   )
