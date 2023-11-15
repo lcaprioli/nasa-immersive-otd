@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -18,8 +17,6 @@ class TimelinePage extends StatefulWidget {
 }
 
 class _TimelinePageState extends State<TimelinePage> {
-  final _controller = PageController();
-
   @override
   void initState() {
     widget.bloc.init();
@@ -29,74 +26,106 @@ class _TimelinePageState extends State<TimelinePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<TimelineBloc, TimelineState>(
-          bloc: widget.bloc,
-          listener: (context, state) {
-            if (state is TimelineError) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
-            }
-          },
-          builder: (context, state) {
-            return switch (state) {
-              TimelineInitial() => const SizedBox.shrink(),
-              TimelineInProgress() => const CircularProgressIndicator(),
-              TimelineSuccess() => Column(
-                  children: [
-                    Expanded(
-                      child: TimelineCarousel(
-                        immersives: state.immersives,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FilledButton(
-                          onPressed: widget.bloc.prev,
-                          child: const Text('<'),
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        FilledButton(
-                          onPressed: state.page > 0 ? widget.bloc.next : null,
-                          child: const Text('>'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                  ],
-                ),
-              TimelineError() => Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.crisis_alert,
-                      size: 95,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      state.message,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    FilledButton(
-                      onPressed: widget.bloc.refresh,
-                      child: const Text('Retry'),
-                    )
-                  ],
-                )
-            };
-          }),
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                'Immersive of the Day',
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              child: BlocConsumer<TimelineBloc, TimelineState>(
+                  bloc: widget.bloc,
+                  listener: (context, state) {
+                    if (state is TimelineError) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(state.message)));
+                    }
+                  },
+                  builder: (context, state) {
+                    return Center(
+                      child: switch (state) {
+                        TimelineInitial() => const SizedBox.shrink(),
+                        TimelineInProgress() =>
+                          const CircularProgressIndicator(),
+                        TimelineSuccess() => Column(
+                            children: [
+                              Flexible(
+                                flex: 3,
+                                child: TimelineCarousel(
+                                  immersives: state.immersives,
+                                ),
+                              ),
+                              ColoredBox(
+                                color: Colors.grey,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: FilledButton(
+                                          onPressed: widget.bloc.prev,
+                                          child: const Text('< Previous'),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Expanded(
+                                        child: FilledButton(
+                                          onPressed: state.page > 0
+                                              ? widget.bloc.next
+                                              : null,
+                                          child: const Text('Next >'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        TimelineError() => Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.crisis_alert,
+                                size: 95,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                state.message,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              FilledButton(
+                                onPressed: widget.bloc.refresh,
+                                child: const Text('Retry'),
+                              )
+                            ],
+                          )
+                      },
+                    );
+                  }),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -133,74 +162,66 @@ class _TimelineCarouselState extends State<TimelineCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          child: PageView.builder(
-            controller: _controller,
-            itemCount: widget.immersives.length,
-            itemBuilder: (_, index) => Column(
-              children: [
-                Image.memory(
-                  Uint8List.fromList(
-                      widget.immersives.elementAt(index).imageBytes ?? []),
-                  height: 280,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        Text(
-                          widget.immersives.elementAt(index).title,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          widget.immersives.elementAt(index).explanation,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+    return ColoredBox(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            flex: 5,
+            child: PageView.builder(
+              controller: _controller,
+              itemCount: widget.immersives.length,
+              itemBuilder: (_, index) => Column(
+                children: [
+                  Expanded(
+                    child: Image.memory(
+                      Uint8List.fromList(
+                          widget.immersives.elementAt(index).imageBytes ?? []),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      widget.immersives.elementAt(index).title,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            children: List.generate(
-              widget.immersives.length,
-              (index) => Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: FilledButton(
-                  style: index == _actual
-                      ? FilledButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColorDark)
-                      : null,
-                  onPressed: () => setState(() {
-                    _actual = index;
-                    _controller.jumpToPage(index);
-                  }),
-                  child: Text(DateFormat.MMMd()
-                      .format(widget.immersives.elementAt(index).date)),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(
+                widget.immersives.length,
+                (index) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: FilledButton(
+                      style: index == _actual
+                          ? FilledButton.styleFrom(
+                              backgroundColor: Colors.deepOrangeAccent)
+                          : null,
+                      onPressed: () => setState(() {
+                        _actual = index;
+                        _controller.jumpToPage(index);
+                      }),
+                      child: Text(DateFormat.MMMd()
+                          .format(widget.immersives.elementAt(index).date)),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
