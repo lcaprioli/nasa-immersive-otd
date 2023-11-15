@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -150,6 +152,7 @@ class _TimelineCarouselState extends State<TimelineCarousel> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+
     _actual = widget.immersives.length - 1;
     _controller = PageController(initialPage: _actual);
     super.initState();
