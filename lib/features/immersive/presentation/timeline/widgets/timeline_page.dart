@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,8 +47,8 @@ class _TimelinePageState extends State<TimelinePage> {
                   bloc: widget.bloc,
                   listener: (context, state) {
                     if (state is TimelineError) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(state.message)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.error.toString())));
                     }
                   },
                   builder: (context, state) {
@@ -108,8 +106,8 @@ class _TimelinePageState extends State<TimelinePage> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              Text(
-                                state.message,
+                              const Text(
+                                'An error has occured, try again.',
                                 textAlign: TextAlign.center,
                               ),
                               const SizedBox(
