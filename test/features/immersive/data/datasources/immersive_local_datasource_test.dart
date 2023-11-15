@@ -49,7 +49,7 @@ void main() {
 
     test(
       'success',
-      () async {
+      () {
         setUpLocalStorageServiceSuccess();
         dataSource.get(startDate, endDate);
 
@@ -59,7 +59,7 @@ void main() {
 
     test(
       'should return ImmersiveDto (success)',
-      () async {
+      () {
         setUpLocalStorageServiceSuccess();
         final result = dataSource.get(startDate, endDate);
         expect(result, equals(tImmersiveDtos));
@@ -68,7 +68,7 @@ void main() {
 
     test(
       'should throw a Exception when fails',
-      () async {
+      () {
         setUpLocalStorageServiceFailure();
         final call = dataSource.get;
         expect(() => call(startDate, endDate),

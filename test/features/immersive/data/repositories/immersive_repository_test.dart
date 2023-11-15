@@ -91,7 +91,7 @@ void main() {
       'should return local data when the a connection is not avaliable',
       () async {
         when(() => mockLocalDatasource.get(startDate, endDate))
-            .thenAnswer((_) async => tImmersiveList);
+            .thenAnswer((_) => tImmersiveList);
 
         final result = await repository.get(startDate, endDate);
 
@@ -115,7 +115,7 @@ void main() {
       'should return error when no local data is returned',
       () async {
         when(() => mockLocalDatasource.get(startDate, endDate))
-            .thenAnswer((_) async => Set.unmodifiable({}));
+            .thenAnswer((_) => Set.unmodifiable({}));
 
         final call = repository.get;
         expect(() => call(DateTime.now(), DateTime.now()),

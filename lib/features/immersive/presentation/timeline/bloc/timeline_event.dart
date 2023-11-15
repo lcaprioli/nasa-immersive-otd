@@ -19,5 +19,12 @@ class TimelinePageChanged extends TimelineEvent {
 
   final int page;
   @override
+  List<Object?> get props => [page];
+}
+
+class TimelinePageRefreshed extends TimelineEvent {
+  const TimelinePageRefreshed();
+
+  @override
   List<Object?> get props => [];
 }

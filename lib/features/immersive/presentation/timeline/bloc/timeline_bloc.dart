@@ -10,6 +10,7 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
         super(const TimelineInitial()) {
     on<TimelineStarted>(_onStarted);
     on<TimelinePageChanged>(_onPageChanged);
+    on<TimelinePageRefreshed>(_onPageRefreshed);
   }
 
   final ImmersiveRepository _repository;
@@ -27,23 +28,17 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
         Duration(days: _page * _interval),
       );
 
-  _onStarted(TimelineStarted event, Emitter emit) async {
-    try {
-      emit(TimelineInProgress(page: _page));
-      final immersives = await _repository.get(_initialDate, _endDate);
-      _collection.add(immersives);
-      emit(TimelineSuccess(
-        immersives: immersives,
-        page: _page,
-      ));
-    } catch (e) {
-      emit(TimelineError(page: _page, message: e.toString()));
-    }
-  }
+  _onStarted(TimelineStarted event, Emitter emit) async => _fetch(0, emit);
 
-  _onPageChanged(TimelinePageChanged event, Emitter emit) async {
+  _onPageChanged(TimelinePageChanged event, Emitter emit) async =>
+      _fetch(event.page, emit);
+
+  _onPageRefreshed(TimelinePageRefreshed event, Emitter emit) async =>
+      _fetch(_page, emit);
+
+  void _fetch(int page, Emitter emit) async {
     try {
-      _page = event.page;
+      _page = page;
 
       if (_collection.elementAtOrNull(_page) == null) {
         emit(TimelineInProgress(page: _page));
@@ -62,4 +57,6 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
   void init() => add(const TimelineStarted());
   void prev() => add(TimelinePageChanged(_page + 1));
   void next() => add(TimelinePageChanged(_page - 1));
+
+  void refresh() => add(const TimelinePageRefreshed());
 }
