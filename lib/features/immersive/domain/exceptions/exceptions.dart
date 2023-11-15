@@ -1,6 +1,8 @@
 class ServerException implements Exception {}
 
-class LocalStorageException implements Exception {}
+class LocalStorageReadException implements Exception {}
+
+class LocalStorageWriteException implements Exception {}
 
 class NoRemoteDataException implements Exception {}
 
