@@ -17,7 +17,7 @@ class TimelineItemContent extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: Image.memory(
-                  Uint8List.fromList(immersive.imageBytes ?? []),
+                  Uint8List.fromList(immersive.imageBytes),
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),

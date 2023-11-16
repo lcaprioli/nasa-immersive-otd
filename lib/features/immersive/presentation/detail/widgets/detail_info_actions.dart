@@ -14,31 +14,39 @@ class DetailInfoActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Padding(
+      padding: const EdgeInsets.all(20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
+          FilledButton(
+            onPressed: () {
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.portraitUp,
+              ]);
+              Modular.to.pop();
+            },
+            child: const Text('< Back'),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          SizedBox(
+            width: 100,
             child: FilledButton(
-              onPressed: () {
-                SystemChrome.setPreferredOrientations([
-                  DeviceOrientation.portraitUp,
-                ]);
-                Modular.to.pop();
-              },
-              child: const Text('< Back'),
-            ),
+                onPressed: onToogle,
+                child: Text('${isVisible ? 'Hide' : 'Show'} info')),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: SizedBox(
-              width: 100,
-              child: FilledButton(
-                  onPressed: onToogle,
-                  child: Text('${isVisible ? 'Hide' : 'Show'} info')),
-            ),
+          const SizedBox(
+            width: 20,
           ),
+          const Chip(
+              label: Padding(
+            padding: EdgeInsets.all(3.0),
+            child: Icon(
+              Icons.pinch,
+            ),
+          ))
         ],
       ),
     );

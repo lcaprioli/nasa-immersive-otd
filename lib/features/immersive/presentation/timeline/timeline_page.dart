@@ -21,6 +21,7 @@ class TimelinePage extends StatefulWidget {
 
 class _TimelinePageState extends State<TimelinePage> {
   int _page = 0;
+  bool _isBusy = false;
 
   @override
   void initState() {
@@ -42,19 +43,23 @@ class _TimelinePageState extends State<TimelinePage> {
               builder: _blocBuilder,
             ),
             TimelinePageNavigation(
-                page: _page,
-                prev: () {
-                  setState(() {
-                    _page++;
-                  });
-                  widget.bloc.prev();
-                },
-                next: () {
-                  setState(() {
-                    _page--;
-                  });
-                  widget.bloc.next();
-                }),
+              prev: _isBusy
+                  ? null
+                  : () {
+                      setState(() {
+                        _page++;
+                      });
+                      widget.bloc.prev();
+                    },
+              next: _isBusy || _page == 0
+                  ? null
+                  : () {
+                      setState(() {
+                        _page--;
+                      });
+                      widget.bloc.next();
+                    },
+            ),
           ],
         ),
       ),
@@ -73,19 +78,36 @@ class _TimelinePageState extends State<TimelinePage> {
       ),
     );
   }
-}
 
-void _blocListener(BuildContext context, TimelineState state) {
-  if (state is TimelineErrorState) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(switch (state.error) {
-      ServerException() => 'Error getting the data from the server',
-      LocalStorageReadException() => 'Error reading the data from your storage',
-      LocalStorageWriteException() => 'Error writing the data to your storage',
-      NoRemoteDataException() => 'No data was found on the server',
-      NoLocalDataException() =>
-        'No cached data was found, connect to the internet and retry',
-      ImageDownloadException() => 'One or more images could not be downloaded',
-    })));
+  void _blocListener(BuildContext context, TimelineState state) {
+    if (state is TimelineInProgressState) {
+      setState(() {
+        _isBusy = true;
+      });
+    } else {
+      setState(() {
+        _isBusy = false;
+      });
+    }
+    if (state is TimelineErrorState) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            switch (state.error) {
+              ServerException() => 'Error getting the data from the server',
+              LocalStorageReadException() =>
+                'Error reading the data from your storage',
+              LocalStorageWriteException() =>
+                'Error writing the data to your storage',
+              NoRemoteDataException() => 'No data was found on the server',
+              NoLocalDataException() =>
+                'No cached data was found, connect to the internet and retry',
+              ImageDownloadException() =>
+                'One or more images could not be downloaded',
+            },
+          ),
+        ),
+      );
+    }
   }
 }

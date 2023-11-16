@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/detail/widgets/detail_info_actions.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/detail/widgets/detail_info_explanation.dart';
-import 'package:nasa_immersive_od/features/immersive/presentation/detail/widgets/detail_info_title.dart';
 
 class DetailInfo extends StatefulWidget {
   const DetailInfo({
@@ -26,24 +25,11 @@ class _DetailInfoState extends State<DetailInfo> {
       children: [
         Align(
           alignment: Alignment.topLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Opacity(
-                  opacity: _showInfo ? 1 : 0,
-                  child: DetailInfoTitle(widget.title),
-                ),
-                DetailInfoActions(
-                  onToogle: () => setState(() {
-                    _showInfo = !_showInfo;
-                  }),
-                  isVisible: _showInfo,
-                ),
-              ],
-            ),
+          child: DetailInfoActions(
+            onToogle: () => setState(() {
+              _showInfo = !_showInfo;
+            }),
+            isVisible: _showInfo,
           ),
         ),
         Align(

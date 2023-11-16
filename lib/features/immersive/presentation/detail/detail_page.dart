@@ -36,7 +36,7 @@ class _DetailPageState extends State<DetailPage> {
             Positioned.fill(
               child: InteractiveViewer(
                 child: Image.memory(
-                  Uint8List.fromList(widget.immersive.imageBytes ?? []),
+                  Uint8List.fromList(widget.immersive.imageBytes),
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
