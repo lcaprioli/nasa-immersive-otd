@@ -14,8 +14,8 @@ sealed class TimelineState extends Equatable {
   List<Object?> get props => [immersives, page];
 }
 
-class TimelineInitial extends TimelineState {
-  const TimelineInitial()
+class TimelineInitialState extends TimelineState {
+  const TimelineInitialState()
       : super(
           immersives: const {},
           page: 0,
@@ -25,8 +25,8 @@ class TimelineInitial extends TimelineState {
   List<Object?> get props => [immersives, page];
 }
 
-class TimelineInProgress extends TimelineState {
-  const TimelineInProgress({required super.page})
+class TimelineInProgressState extends TimelineState {
+  const TimelineInProgressState({required super.page})
       : super(
           immersives: const {},
         );
@@ -35,8 +35,8 @@ class TimelineInProgress extends TimelineState {
   List<Object?> get props => [immersives, page];
 }
 
-class TimelineSuccess extends TimelineState {
-  const TimelineSuccess({
+class TimelineSuccessState extends TimelineState {
+  const TimelineSuccessState({
     required super.immersives,
     required super.page,
   });
@@ -45,8 +45,8 @@ class TimelineSuccess extends TimelineState {
   List<Object?> get props => [immersives, page];
 }
 
-class TimelineError extends TimelineState {
-  const TimelineError({
+class TimelineErrorState extends TimelineState {
+  const TimelineErrorState({
     required super.page,
     required this.error,
   }) : super(immersives: const {});
