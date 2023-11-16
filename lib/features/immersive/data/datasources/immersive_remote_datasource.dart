@@ -10,25 +10,19 @@ class ImmersiveRemoteDatasource {
   final ApiService _apiService;
 
   Future<Set<ImmersiveDto>> getApod(DateTime start, DateTime end) async {
-    try {
-      final data = await _apiService.get(
-        {
-          'start_date': start.toApiFormat(),
-          'end_date': end.toApiFormat(),
-        },
-      ) as List<dynamic>;
-      final resultList = <ImmersiveDto>{};
-      for (var json in data) {
-        final dto = ImmersiveDto.fromJson(json);
-        final imageBytes = await _apiService.downloadImageData(dto.url);
-        final hdImageBytes = (dto.hdurl != null)
-            ? await _apiService.downloadImageData(dto.hdurl!)
-            : null;
-        resultList.add(dto.copyWithBytes(imageBytes, hdImageBytes));
-      }
-      return resultList;
-    } catch (e) {
-      throw Exception('An error occurred: $e');
+    final data = await _apiService.get(
+      {
+        'start_date': start.toApiFormat(),
+        'end_date': end.toApiFormat(),
+      },
+    ) as List<dynamic>;
+    final resultList = <ImmersiveDto>{};
+    for (var json in data) {
+      final dto = ImmersiveDto.fromJson(json);
+      final imageBytes = await _apiService.downloadImageData(dto.url);
+      resultList.add(dto.copyWithBytes(imageBytes));
+      await Future.delayed(const Duration(milliseconds: 500));
     }
+    return resultList;
   }
 }

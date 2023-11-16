@@ -8,7 +8,7 @@ import 'package:nasa_immersive_od/features/immersive/data/dtos/immersive_dto.dar
 import 'package:nasa_immersive_od/features/immersive/data/repositories/immersive_repository.dart';
 import 'package:nasa_immersive_od/shared/services/connection_check_service.dart';
 
-import '../../../fixtures/fixture_reader.dart';
+import '../../../../fixtures/fixture_reader.dart';
 
 class MockRemoteDatasource extends Mock implements ImmersiveRemoteDatasource {}
 
@@ -91,7 +91,7 @@ void main() {
       'should return local data when the a connection is not avaliable',
       () async {
         when(() => mockLocalDatasource.get(startDate, endDate))
-            .thenReturn(tImmersiveList);
+            .thenAnswer((_) => tImmersiveList);
 
         final result = await repository.get(startDate, endDate);
 

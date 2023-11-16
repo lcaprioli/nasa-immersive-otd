@@ -1,6 +1,7 @@
 import 'package:nasa_immersive_od/features/immersive/data/datasources/immersive_local_datasource.dart';
 import 'package:nasa_immersive_od/features/immersive/data/datasources/immersive_remote_datasource.dart';
 import 'package:nasa_immersive_od/features/immersive/domain/entities/immersive_entity.dart';
+import 'package:nasa_immersive_od/features/immersive/domain/exceptions/exceptions.dart';
 import 'package:nasa_immersive_od/shared/services/connection_check_service.dart';
 
 class ImmersiveRepository {
@@ -21,22 +22,22 @@ class ImmersiveRepository {
       try {
         final result = await _remoteDatasource.getApod(start, end);
         if (result.isEmpty) {
-          throw Exception('No data found');
+          throw NoRemoteDataException();
         }
         await _localDatasource.write(result);
         return result;
       } catch (e) {
-        throw Exception('An error occurred trying to get the remote data: $e');
+        throw NoRemoteDataException();
       }
     } else {
       try {
         final result = _localDatasource.get(start, end);
         if (result.isEmpty) {
-          throw Exception('No data found');
+          throw NoLocalDataException();
         }
         return result;
       } catch (e) {
-        throw Exception('An error occurred trying to get the cached data: $e');
+        throw NoLocalDataException();
       }
     }
   }

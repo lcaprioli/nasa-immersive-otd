@@ -10,34 +10,26 @@ class ImmersiveLocalDatasource {
   final LocalStorageService _localStorageService;
 
   Set<ImmersiveDto> get(DateTime start, DateTime end) {
-    try {
-      final resultList = <ImmersiveDto>{};
-      final endDate = end.add(const Duration(days: 1));
-      DateTime currentDate = start;
-      while (currentDate.isBefore(endDate)) {
-        final itemData = _localStorageService.get(currentDate.toApiFormat());
-        if (itemData != null) {
-          resultList.add(ImmersiveDto.fromJson(itemData));
-        }
-
-        currentDate = currentDate.add(const Duration(days: 1));
+    final resultList = <ImmersiveDto>{};
+    final endDate = end.add(const Duration(days: 1));
+    DateTime currentDate = start;
+    while (currentDate.isBefore(endDate)) {
+      final itemData = _localStorageService.get(currentDate.toApiFormat());
+      if (itemData != null) {
+        resultList.add(ImmersiveDto.fromJson(itemData));
       }
-      return resultList;
-    } catch (e) {
-      throw Exception('An error occurred: $e');
+
+      currentDate = currentDate.add(const Duration(days: 1));
     }
+    return resultList;
   }
 
   Future<void> write(Set<ImmersiveDto> items) async {
-    try {
-      for (final immersiveDto in items) {
-        await _localStorageService.set(
-          immersiveDto.date.toApiFormat(),
-          immersiveDto.toJson(),
-        );
-      }
-    } catch (e) {
-      throw Exception('An error occurred: $e');
+    for (final immersiveDto in items) {
+      await _localStorageService.set(
+        immersiveDto.date.toApiFormat(),
+        immersiveDto.toJson(),
+      );
     }
   }
 }
