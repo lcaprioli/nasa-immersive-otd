@@ -29,8 +29,8 @@ void main() {
     ImmersiveDto.fromJson(json.decode(fixture('apod_item_2017-07-09.json'))),
     ImmersiveDto.fromJson(json.decode(fixture('apod_item_2017-07-10.json'))),
   };
-  test('Initial state should be TimelineInitial', () {
-    expect(bloc.state, equals(const TimelineInitial()));
+  test('Initial state should be TimelineInitialState', () {
+    expect(bloc.state, equals(const TimelineInitialState()));
   });
 
   test(
@@ -51,8 +51,8 @@ void main() {
       when(() => mockImmersiveRepository.get(any(), any()))
           .thenAnswer((_) async => tImmersiveList);
       final expected = [
-        const TimelineInProgress(page: 0),
-        TimelineSuccess(immersives: tImmersiveList, page: 0),
+        const TimelineInProgressState(page: 0),
+        TimelineSuccessState(immersives: tImmersiveList, page: 0),
       ];
       bloc.add(const TimelineStarted());
       expectLater(bloc.stream, emitsInOrder(expected));
@@ -66,8 +66,8 @@ void main() {
           .thenAnswer((_) async => throw tException);
 
       final expected = [
-        const TimelineInProgress(page: 0),
-        TimelineError(page: 0, error: tException)
+        const TimelineInProgressState(page: 0),
+        TimelineErrorState(page: 0, error: tException)
       ];
 
       bloc.add(const TimelineStarted());

@@ -5,7 +5,7 @@ import 'package:nasa_immersive_od/features/immersive/data/datasources/immersive_
 import 'package:nasa_immersive_od/features/immersive/data/repositories/immersive_repository.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/detail/detail_page.dart';
 import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/timeline_bloc.dart';
-import 'package:nasa_immersive_od/features/immersive/presentation/timeline/widgets/timeline_page.dart';
+import 'package:nasa_immersive_od/features/immersive/presentation/timeline/timeline_page.dart';
 import 'package:nasa_immersive_od/shared/services/api_service/api_service.dart';
 import 'package:nasa_immersive_od/shared/services/connection_check_service.dart';
 import 'package:nasa_immersive_od/shared/services/local_storage_service/local_storage_service.dart';

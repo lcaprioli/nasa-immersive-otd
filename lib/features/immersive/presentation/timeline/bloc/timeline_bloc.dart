@@ -8,7 +8,7 @@ import 'package:nasa_immersive_od/features/immersive/presentation/timeline/bloc/
 class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
   TimelineBloc({required ImmersiveRepository repository})
       : _repository = repository,
-        super(const TimelineInitial()) {
+        super(const TimelineInitialState()) {
     on<TimelineStarted>(_onStarted);
     on<TimelinePageChanged>(_onPageChanged);
     on<TimelinePageRefreshed>(_onPageRefreshed);
@@ -42,16 +42,16 @@ class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
       _page = page;
 
       if (_collection.elementAtOrNull(_page) == null) {
-        emit(TimelineInProgress(page: _page));
+        emit(TimelineInProgressState(page: _page));
         final immersives = await _repository.get(_initialDate, _endDate);
         _collection.add(immersives);
       }
-      emit(TimelineSuccess(
+      emit(TimelineSuccessState(
         immersives: _collection.elementAt(_page),
         page: _page,
       ));
     } on CustomException catch (e) {
-      emit(TimelineError(page: _page, error: e));
+      emit(TimelineErrorState(page: _page, error: e));
     }
   }
 
