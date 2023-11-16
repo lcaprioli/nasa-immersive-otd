@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:nasa_immersive_od/features/immersive/domain/exceptions/exceptions.dart';
-import 'package:nasa_immersive_od/shared/services/api_service/api_service_consts.dart';
 
 class ApiService {
   ApiService(
@@ -14,9 +13,10 @@ class ApiService {
   Future<dynamic> get(Map<String, String> params) async {
     try {
       final response = await _dio.get(
-        ApiServiceConsts.kUrl,
-        queryParameters: Map.from(ApiServiceConsts.kApiKeyParam)
-          ..addAll(params),
+        'https://api.nasa.gov/planetary/apod',
+        queryParameters:
+            Map.from({'api_key': const String.fromEnvironment('API_KEY')})
+              ..addAll(params),
       );
       if (response.statusCode == 200) {
         return response.data;
