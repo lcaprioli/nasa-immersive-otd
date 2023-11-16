@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 class TimelinePageNavigation extends StatelessWidget {
   const TimelinePageNavigation({
     super.key,
-    required this.page,
     required this.prev,
     required this.next,
   });
 
-  final int page;
-  final VoidCallback prev;
-  final VoidCallback next;
+  final VoidCallback? prev;
+  final VoidCallback? next;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,7 @@ class TimelinePageNavigation extends StatelessWidget {
             ),
             Expanded(
               child: FilledButton(
-                onPressed: page > 0 ? next : null,
+                onPressed: next,
                 child: const Text('Next >'),
               ),
             ),

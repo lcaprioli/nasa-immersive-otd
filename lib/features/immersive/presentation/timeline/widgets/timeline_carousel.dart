@@ -54,15 +54,23 @@ class _TimelineCarouselState extends State<TimelineCarousel> {
                   child: PageView.builder(
                     controller: _controller,
                     itemCount: widget.immersives.length,
-                    itemBuilder: (_, index) =>
-                        TimelineItemContent(widget.immersives.elementAt(index)),
+                    itemBuilder: (_, index) => TimelineItemContent(
+                      widget.immersives.elementAt(index),
+                    ),
+                    onPageChanged: (index) => setState(
+                      () => _actual = index,
+                    ),
                   ),
                 ),
                 TimelineDateNavigation(
                   dates: widget.immersives.map((e) => e.date).toSet(),
                   onPressed: (index) => setState(() {
                     _actual = index;
-                    _controller.jumpToPage(index);
+                    _controller.animateToPage(
+                      index,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
                   }),
                   current: _actual,
                 ),
