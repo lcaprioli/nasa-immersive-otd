@@ -32,44 +32,40 @@ class _DetailPageState extends State<DetailPage> {
           return true;
         },
         child: Scaffold(
-            backgroundColor: Colors.blue,
-            body: Container(
-              color: Colors.yellow,
-              child: Row(
+            body: Row(
+          children: [
+            DetailInfoActions(
+              onToogle: () => setState(() {
+                _showInfo = !_showInfo;
+              }),
+              isVisible: _showInfo,
+            ),
+            Expanded(
+              child: Stack(
+                fit: StackFit.expand,
                 children: [
-                  DetailInfoActions(
-                    onToogle: () => setState(() {
-                      _showInfo = !_showInfo;
-                    }),
-                    isVisible: _showInfo,
+                  Positioned.fill(
+                    child: InteractiveViewer(
+                      child: Image.memory(
+                        Uint8List.fromList(widget.immersive.imageBytes),
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  Expanded(
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Positioned.fill(
-                          child: InteractiveViewer(
-                            child: Image.memory(
-                              Uint8List.fromList(widget.immersive.imageBytes),
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                          visible: _showInfo,
-                          child: SafeArea(
-                            child: DetailInfo(
-                              title: widget.immersive.title,
-                              explanation: widget.immersive.explanation,
-                            ),
-                          ),
-                        ),
-                      ],
+                  Visibility(
+                    visible: _showInfo,
+                    child: SafeArea(
+                      child: DetailInfo(
+                        title: widget.immersive.title,
+                        explanation: widget.immersive.explanation,
+                      ),
                     ),
                   ),
                 ],
               ),
-            )));
+            ),
+          ],
+        )));
   }
 }

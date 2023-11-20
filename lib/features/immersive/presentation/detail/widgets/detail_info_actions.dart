@@ -14,55 +14,71 @@ class DetailInfoActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
+    return SafeArea(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          FilledButton(
+          IconButton(
             onPressed: () {
               SystemChrome.setPreferredOrientations([
                 DeviceOrientation.portraitUp,
               ]);
               Modular.to.pop();
             },
-            child: const Text('< Back'),
+            icon: const Icon(Icons.chevron_left),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            width: 100,
-            child: FilledButton(
-              onPressed: onToogle,
-              child: Text('${isVisible ? 'Hide' : 'Show'} info'),
+          IconButton(
+            onPressed: onToogle,
+            icon: Icon(
+              isVisible ? Icons.visibility : Icons.visibility_off,
             ),
           ),
-          const SizedBox(
-            width: 20,
+          Row(
+            children: [
+              IconButton(
+                onPressed: onToogle,
+                icon: const Icon(Icons.zoom_out),
+              ),
+              IconButton(
+                onPressed: onToogle,
+                icon: const Icon(Icons.zoom_in),
+              ),
+            ],
           ),
-          FilledButton(
-            onPressed: onToogle,
-            child: const Text('-'),
-          ),
-          FilledButton(
-            onPressed: onToogle,
-            child: const Text('+'),
-          ),
-          FilledButton(
-            onPressed: onToogle,
-            child: const Text('L'),
-          ),
-          FilledButton(
-            onPressed: onToogle,
-            child: const Text('T'),
-          ),
-          FilledButton(
-            onPressed: onToogle,
-            child: const Text('B'),
-          ),
-          FilledButton(
-            onPressed: onToogle,
-            child: const Text('R'),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: onToogle,
+                    icon: const Icon(Icons.arrow_circle_up_outlined),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: onToogle,
+                    icon: const Icon(Icons.arrow_circle_left_outlined),
+                  ),
+                  IconButton(
+                    onPressed: onToogle,
+                    icon: const Icon(Icons.arrow_circle_right_outlined),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: onToogle,
+                    icon: const Icon(Icons.arrow_circle_down_outlined),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
