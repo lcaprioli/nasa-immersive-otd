@@ -17,13 +17,11 @@ class DetailInfo extends StatefulWidget {
 }
 
 class _DetailInfoState extends State<DetailInfo> {
-  bool _showInfo = true;
-
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Align(
+        /*     Align(
           alignment: Alignment.topLeft,
           child: DetailInfoActions(
             onToogle: () => setState(() {
@@ -31,13 +29,10 @@ class _DetailInfoState extends State<DetailInfo> {
             }),
             isVisible: _showInfo,
           ),
-        ),
+        ), */
         Align(
           alignment: Alignment.bottomLeft,
-          child: Opacity(
-            opacity: _showInfo ? 1 : 0,
-            child: DetailInfoExplanation(widget.explanation),
-          ),
+          child: DetailInfoExplanation(widget.explanation),
         ),
       ],
     );

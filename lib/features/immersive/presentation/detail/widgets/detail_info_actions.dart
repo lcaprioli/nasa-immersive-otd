@@ -16,8 +16,7 @@ class DetailInfoActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Column(
         children: [
           FilledButton(
             onPressed: () {
@@ -29,24 +28,42 @@ class DetailInfoActions extends StatelessWidget {
             child: const Text('< Back'),
           ),
           const SizedBox(
-            width: 20,
+            height: 20,
           ),
           SizedBox(
             width: 100,
             child: FilledButton(
-                onPressed: onToogle,
-                child: Text('${isVisible ? 'Hide' : 'Show'} info')),
+              onPressed: onToogle,
+              child: Text('${isVisible ? 'Hide' : 'Show'} info'),
+            ),
           ),
           const SizedBox(
             width: 20,
           ),
-          const Chip(
-              label: Padding(
-            padding: EdgeInsets.all(3.0),
-            child: Icon(
-              Icons.pinch,
-            ),
-          ))
+          FilledButton(
+            onPressed: onToogle,
+            child: const Text('-'),
+          ),
+          FilledButton(
+            onPressed: onToogle,
+            child: const Text('+'),
+          ),
+          FilledButton(
+            onPressed: onToogle,
+            child: const Text('L'),
+          ),
+          FilledButton(
+            onPressed: onToogle,
+            child: const Text('T'),
+          ),
+          FilledButton(
+            onPressed: onToogle,
+            child: const Text('B'),
+          ),
+          FilledButton(
+            onPressed: onToogle,
+            child: const Text('R'),
+          ),
         ],
       ),
     );
